@@ -200,7 +200,7 @@ syn.request = function(t)
         end
     end
     if analyzers.DisableHttpReq then writee("Blocked HTTP Request") return end
-    if analyzers.DisableWebhookReq and (string.find(t.Url, "https://discord.com/api/webhooks/") or string.find(t.Url, "https://discordapp.com/api/webhooks/")) then writee("Blocked HTTP Request to discord webhook.") end
+    if analyzers.DisableWebhookReq and (string.find(t.Url, "https://discord.com/api/webhooks/") or string.find(t.Url, "https://discordapp.com/api/webhooks/")) then writee("Blocked HTTP Request to discord webhook.") return; end
     return oldrequest(t)
 end
 
