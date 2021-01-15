@@ -163,13 +163,13 @@ oldget, oldgetasync = hookfunction(game.HttpGet, function(self, url, ...)
     if not analyzers.Http then print("no http") return oldget(self, url, ...) end
     writew("Http Spy - HttpGet")
     write("A http request was sent to "..tostring(url).."\n\n")
-    if analyzers.DisableHttpReq then writee("Blocked HTTP Request") return end
+    if analyzers.DisableHttpReq then writee("Blocked HTTP Request\n\n") return end
     return oldget(self, url, ...)
 end), hookfunction(game.HttpGetAsync, function(self, url, ...)
     if not analyzers.Http then return oldgetasync(self, url, ...) end
     writew("Http Spy - HttpGetAsync")
     write("A http request was sent to "..tostring(url).."\n\n")
-    if analyzers.DisableHttpReq then writee("Blocked HTTP Request") return end
+    if analyzers.DisableHttpReq then writee("Blocked HTTP Request\n\n") return end
     return oldgetasync(self, url, ...)
 end)
 
@@ -200,7 +200,7 @@ syn.request = function(t)
         end
     end
     if analyzers.DisableHttpReq then writee("Blocked HTTP Request") return end
-    if analyzers.DisableWebhookReq and (string.find(t.Url, "https://discord.com/api/webhooks/") or string.find(t.Url, "https://discordapp.com/api/webhooks/")) then writee("Blocked HTTP Request to discord webhook.") return; end
+    if analyzers.DisableWebhookReq and (string.find(t.Url, "https://discord.com/api/webhooks/") or string.find(t.Url, "https://discordapp.com/api/webhooks/")) then writee("Blocked HTTP Request to discord webhook.\n\n") return; end
     return oldrequest(t)
 end
 
