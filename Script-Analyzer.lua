@@ -1,11 +1,8 @@
 -- Script Analyzer [OPEN SOURCE]
 -- Made by CDXX/CEO of Africa#0591
-if not syn and http_request then
-    debug.request = http_request
-    syn = debug
-else
-    error("Exploit not supported! Krnl or Synapse are supported!")
-end
+
+if not syn then print("Exploit not supported") return end
+
 local write = function(a) rconsoleprint("@@WHITE@@") rconsoleprint(a) end
 local writei = function(a) rconsoleprint("@@BLUE@@") rconsoleprint("[*]"..a) end
 local writew = function(a) rconsoleprint("@@YELLOW@@") rconsoleprint("[*]"..a.."\n") end
@@ -67,13 +64,12 @@ end
 -- Add Commands
 
 local analyzers = {
-    Http = true,
+    Http = false,
     Remotes = false,
     Namecalls = false,
     Indexes = false,
-    GTSpy = true,
-    genvSpy = true,
-    SynSpy = true,
+    GTSpy = false,
+    SynSpy = false,
     DisableHttpReq = false,
     DisableWebhookReq = false
 }
@@ -88,8 +84,7 @@ addcmd({"commands", "cmds"}, function(args)
  remote - Logs all remotes that are invoked/fired by the script.
  namecall - Logs all namecalls that are invoked by the script.
  index - Logs all indexes that are invoked by the script.
- _GSpy - Logs all changes made to the _G table.
- 
+ _gtable - Logs all changes made to the _G table.
  syntable - Logs all changes made to the syn table.
     ]])
 end)
@@ -124,13 +119,9 @@ addcmd({"index"}, function(args)
     write("Set index analyzer to "..tostring(analyzers.Indexes).."\n\n")
 end)
 
-addcmd({"_GSpy"}, function(args)
+addcmd({"_gtable"}, function(args)
     if args[1] == "true" then analyzers.GTSpy = true else analyzers.GTSpy = false end
     write("Set _G table analyzer to "..tostring(analyzers.GTSpy).."\n\n")
-end)
-addcmd({"genvSpy"}, function(args)
-    if args[1] == "true" then analyzers.genvSpy = true else analyzers.genvSpy = false end
-    write("Set getgenv() table analyzer to "..tostring(analyzers.genvSpy).."\n\n")
 end)
 
 addcmd({"syntable"}, function(args)
@@ -223,14 +214,7 @@ setmetatable(_G, {
         if analyzers.GTSpy then writew("GT Spy - New Index") write("New index was declared with the name of "..tostring(i).." and value of "..tostring(v).."\n\n") end rawset(t, i, v)
     end
 })
-setmetatable(getgenv(), {
-    __index = function(t, k)
-        if analyzers.genvSpy then writew("genv Spy - Invalid Index") write("Attempt to index "..k.." with a nil value inside getgenv()\n\n") end return;
-    end,
-    __newindex = function(t, i, v) 
-        if analyzers.genvSpy then writew("genv Spy - New Index") write("New index was declared with the name of "..tostring(i).." and value of "..tostring(v).."\n\n") end rawset(t, i, v)
-    end
-})
+
 -- Remote Spy
 -- Decided to use hookfunction instead of the namecall metatable above
 
